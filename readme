@@ -1,0 +1,37 @@
+# пример вазимодействия с БД через SQLALCHEMY с классом AlternativeModelManager
+    #создание ЭК менеджера таблицы
+    DATABASE_URL = f"postgresql+psycopg2://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
+    alternative_manager = AlternativeModelManager(DATABASE_URL)# эк менеджера для создания таблиц
+    # создание таблицы
+    my_table_name = "users228"
+    users_columns = {
+    'username': String(50),
+    'email': String(100),
+    'age': Integer,
+    'is_active': Boolean,
+    'created_at': DateTime
+    }
+    # Создаем модель на лету
+    alternative_manager.create_model(my_table_name, users_columns)
+    #CRUD операции
+    #создание строки
+    user1 = alternative_manager.create_record('users228', {
+        'username': 'alex_2ivanov',
+        'email': 'alex@example.com',
+        'age': 25,
+        'is_active': True,
+        'created_at': datetime.now()
+    })
+    # чтение строки
+    alternative_manager.read('users228',1)
+    # чтение всех строк
+    alternative_manager.read_all('users228')
+    # обновление инфы в строке  
+    updated_user = alternative_manager.update('users', 2, {
+    'age': 31,
+    'email': 'maria_new@example.com'
+    })
+    # удаление записи 
+    deleted = alternative_manager.delete('users', 1)
+    # удаление таблицы
+    alternative_manager.delete_table('users228')
